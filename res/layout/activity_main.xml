@@ -119,68 +119,10 @@
     </RadioGroup>
 
     <LinearLayout
-        android:id="@+id/priority_button_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/type_buttons_group"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical">
-
-        <Switch
-            android:id="@+id/set_priority_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/set_priority_title" />
-
-        <RadioGroup
-            android:id="@+id/priority_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/priority_min"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/priority_min_title" />
-
-            <RadioButton
-                android:id="@+id/priority_low"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/priority_low_title" />
-
-            <RadioButton
-                android:id="@+id/priority_default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/priority_default_title" />
-
-            <RadioButton
-                android:id="@+id/priority_high"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/priority_high_title" />
-
-            <RadioButton
-                android:id="@+id/priority_max"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/priority_max_title" />
-        </RadioGroup>
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/action_buttons_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/priority_button_layout"
+        android:layout_below="@id/type_buttons_group"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"

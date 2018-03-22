@@ -23,16 +23,16 @@
     <string name="messaging_title">Message</string>
     <string name="media_title">Media</string>
 
-    <!-- Priority buttons -->
-    <string name="set_priority_title">Set priority</string>
-    <string name="priority_min_title">Minimal</string>
-    <string name="priority_low_title">Low</string>
-    <string name="priority_default_title">Default</string>
-    <string name="priority_high_title">High</string>
-    <string name="priority_max_title">Maximal</string>
-
     <!-- Action buttons -->
     <string name="show_action_buttons_title">Show Actions</string>
+
+    <!-- Notification channels -->
+    <string name="default_notification_chanel_description">Category used for default Notifications</string>
+    <string name="big_text_notification_chanel_description">Category used for text Notifications</string>
+    <string name="big_picture_notification_chanel_description">Category used for picture Notifications</string>
+    <string name="inbox_notification_chanel_description">Category used for inbox Notifications</string>
+    <string name="messaging_notification_chanel_description">Category used for message Notifications</string>
+    <string name="media_notification_chanel_description">Category used for media Notifications</string>
 
     <!-- Notification text -->
     <string name="notification_sub_text">Sub text</string>
@@ -64,4 +64,5 @@
     <string name="use_default_notification_color_summary">Enable to use the default notification color, disable to choose a color.</string>
     <string name="notification_color_title">Notification color</string>
     <string name="color_title">Color</string>
+    <string name="pick_color_title">Pick color</string>
 </resources>

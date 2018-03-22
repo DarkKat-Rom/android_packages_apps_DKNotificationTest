@@ -3,7 +3,7 @@
 
     <uses-sdk
         android:minSdkVersion="24"
-        android:targetSdkVersion="24" />
+        android:targetSdkVersion="27" />
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
@@ -22,6 +22,10 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings_title"/>
+
+        <activity
+            android:name="net.darkkatrom.dkcolorpicker.ColorPickerActivity"
+            android:label="@string/pick_color_title" />
 
         <receiver
             android:name=".NotificationReplyReceiver"

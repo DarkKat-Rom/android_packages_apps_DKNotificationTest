@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 DarkKat
+ * Copyright (C) 2018 DarkKat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package net.darkkatrom.nnotiftest;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
 
@@ -25,7 +27,10 @@ import net.darkkatrom.dkcolorpicker.fragment.ColorPickerFragment;
 import net.darkkatrom.dkcolorpicker.preference.ColorPickerPreference;
 import net.darkkatrom.nnotiftest.fragments.SettingsFragment;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends Activity implements
+        PreferenceFragment.OnPreferenceStartFragmentCallback {
+
+    public static final String EXTRA_SHOW_FRAGMENT = ":android:show_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +55,21 @@ public class SettingsActivity extends PreferenceActivity {
         return true;
     }
 
-    @Override
-    protected boolean isValidFragment(String fragmentName) {
-        return ColorPickerFragment.class.getName().equals(fragmentName);
+    public void startPreferencePanel(String fragmentClass, Bundle args, int titleRes,
+        CharSequence titleText, Fragment resultTo, int resultRequestCode) {
+        Fragment f = Fragment.instantiate(this, fragmentClass, args);
+        if (resultTo != null) {
+            f.setTargetFragment(resultTo, resultRequestCode);
+        }
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(android.R.id.content, f);
+        if (titleRes != 0) {
+            transaction.setBreadCrumbTitle(titleRes);
+        } else if (titleText != null) {
+            transaction.setBreadCrumbTitle(titleText);
+        }
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.addToBackStack(null);
+        transaction.commitAllowingStateLoss();
     }
 }

@@ -22,14 +22,14 @@
     <string name="messaging_title">Nachr.</string>
     <string name="media_title">Media</string>
 
-    <string name="set_priority_title">Priorität festlegen</string>
-    <string name="priority_min_title">Minimal</string>
-    <string name="priority_low_title">Niedrig</string>
-    <string name="priority_default_title">Standard</string>
-    <string name="priority_high_title">Hoch</string>
-    <string name="priority_max_title">Maximal</string>
-
     <string name="show_action_buttons_title">Aktionen anzeigen</string>
+
+    <string name="default_notification_chanel_description">Kategorie für Standard Benachrichtigungen</string>
+    <string name="big_text_notification_chanel_description">Kategorie für Text Benachrichtigungen</string>
+    <string name="big_picture_notification_chanel_description">Kategorie für Bild Benachrichtigungen</string>
+    <string name="inbox_notification_chanel_description">Kategorie für Benachrichtigungen über den Posteingang</string>
+    <string name="messaging_notification_chanel_description">Kategorie für Benachrichtigungen über Nachrichten</string>
+    <string name="media_notification_chanel_description">Kategorie für Media Benachrichtigungen</string>
 
     <string name="notification_sub_text">Untertext</string>
     <string name="notification_title">Benachrichtigungstitel</string>
@@ -59,4 +59,5 @@
     <string name="use_default_notification_color_summary">Aktivieren um die Standard Benachrichigungsfarbe zu benutzen, deaktivieren um die Farbe zu wählen.</string>
     <string name="notification_color_title">Benachrichigungsfarbe</string>
     <string name="color_title">Farbe</string>
+    <string name="pick_color_title">Farbe wählen</string>
 </resources>

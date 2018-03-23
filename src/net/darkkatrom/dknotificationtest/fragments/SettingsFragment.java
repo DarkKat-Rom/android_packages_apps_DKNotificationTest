@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 DarkKat
+ * Copyright (C) 2018 DarkKat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package net.darkkatrom.nnotiftest.fragments;
+package net.darkkatrom.dknotificationtest.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.SwitchPreference;
 
 import net.darkkatrom.dkcolorpicker.fragment.SettingsColorPickerFragment;
-import net.darkkatrom.nnotiftest.R;
-import net.darkkatrom.nnotiftest.utils.PreferenceUtils;
+import net.darkkatrom.dknotificationtest.R;
+import net.darkkatrom.dknotificationtest.utils.PreferenceUtils;
 
 public class SettingsFragment extends SettingsColorPickerFragment implements
         SharedPreferences.OnSharedPreferenceChangeListener {

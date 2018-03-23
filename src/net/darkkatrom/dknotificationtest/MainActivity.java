@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 DarkKat
+ * Copyright (C) 2018 DarkKat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.darkkatrom.nnotiftest;
+package net.darkkatrom.dknotificationtest;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -42,8 +42,8 @@ import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.ToggleButton;
 
-import net.darkkatrom.nnotiftest.utils.PreferenceUtils;
-import net.darkkatrom.nnotiftest.utils.Randomizer;
+import net.darkkatrom.dknotificationtest.utils.PreferenceUtils;
+import net.darkkatrom.dknotificationtest.utils.Randomizer;
 
 import java.util.ArrayList;
 import java.util.List;

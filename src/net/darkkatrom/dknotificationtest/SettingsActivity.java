@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.darkkatrom.nnotiftest;
+package net.darkkatrom.dknotificationtest;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -25,7 +25,7 @@ import android.os.Bundle;
 
 import net.darkkatrom.dkcolorpicker.fragment.ColorPickerFragment;
 import net.darkkatrom.dkcolorpicker.preference.ColorPickerPreference;
-import net.darkkatrom.nnotiftest.fragments.SettingsFragment;
+import net.darkkatrom.dknotificationtest.fragments.SettingsFragment;
 
 public class SettingsActivity extends Activity implements
         PreferenceFragment.OnPreferenceStartFragmentCallback {

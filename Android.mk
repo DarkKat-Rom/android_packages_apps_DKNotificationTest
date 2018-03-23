@@ -17,7 +17,7 @@ LOCAL_AAPT_FLAGS := --auto-add-overlay \
 
 LOCAL_PROGUARD_ENABLED := disabled
 
-LOCAL_PACKAGE_NAME := NougatNotificationTest
+LOCAL_PACKAGE_NAME := DKNotificationTest
 LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
 

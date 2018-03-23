@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.darkkatrom.nnotiftest">
+    package="net.darkkatrom.dknotificationtest">
 
     <uses-sdk
         android:minSdkVersion="24"
@@ -32,7 +32,7 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="net.darkkatrom.nnotiftest.ACTION_NOTIFICATION_REPLY"/>
+                <action android:name="net.darkkatrom.dknotificationtest.ACTION_NOTIFICATION_REPLY"/>
             </intent-filter>
         </receiver>
 

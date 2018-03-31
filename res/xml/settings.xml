@@ -31,11 +31,13 @@
         android:summary="@string/show_tombstone_actions_summary"
         android:defaultValue="false" />
 
+<!--
     <SwitchPreference
         android:key="show_reply_action"
         android:title="@string/show_reply_action_title"
         android:summary="@string/show_reply_action_summary"
         android:defaultValue="false" />
+-->
 
     <PreferenceCategory
         android:key="cat_notification_color"
@@ -51,8 +53,8 @@
             android:key="notification_color"
             android:title="@string/color_title"
             app:pickerSubtitle="@string/notification_color_title"
-            app:defaultColor="@color/theme_accent"
-            app:resetColor1="@color/theme_accent" />
+            app:defaultColor="@color/default_notification_color"
+            app:resetColor1="@color/default_notification_color" />
 
     </PreferenceCategory>
 </PreferenceScreen>

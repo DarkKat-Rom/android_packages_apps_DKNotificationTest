@@ -27,6 +27,7 @@
             android:name="net.darkkatrom.dkcolorpicker.ColorPickerActivity"
             android:label="@string/pick_color_title" />
 
+<!--
         <receiver
             android:name=".NotificationReplyReceiver"
             android:enabled="true"
@@ -35,6 +36,7 @@
                 <action android:name="net.darkkatrom.dknotificationtest.ACTION_NOTIFICATION_REPLY"/>
             </intent-filter>
         </receiver>
+-->
 
     </application>
 

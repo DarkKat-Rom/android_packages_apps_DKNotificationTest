@@ -22,6 +22,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.RemoteInput;
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -41,6 +42,9 @@ import android.widget.RadioGroup;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.ToggleButton;
+
+import com.android.internal.util.darkkat.ColorHelper;
+import com.android.internal.util.darkkat.ThemeHelper;
 
 import net.darkkatrom.dknotificationtest.utils.PreferenceUtils;
 import net.darkkatrom.dknotificationtest.utils.Randomizer;
@@ -64,6 +68,8 @@ public class MainActivity extends Activity implements  View.OnClickListener,
     public static final String MEDIA_NOTIFICATION_CHANNEL_ID =
             "media_notification_chanel";
 
+    public static final int DEFAULT_NOTIFICATION_COLOR = 0xff757575;
+
     private PreferenceUtils mUtils;
     private NotificationManager mManager;
     private Randomizer mRandomizer;
@@ -74,10 +80,16 @@ public class MainActivity extends Activity implements  View.OnClickListener,
     private Switch mShowActionButtons;
     private ImageView mFab;
 
-    private GradientDrawable mFabBackground;
+    private GradientDrawable mFabContainerBackground;
+
+    private boolean mUseOptionalLightStatusBar;
+    private boolean mUseOptionalLightNavigationBar;
+
+    private boolean mIsMediaNotification = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        updateTheme();
         super.onCreate(savedInstanceState);
 
         mUtils = new PreferenceUtils(getApplicationContext());
@@ -92,7 +104,7 @@ public class MainActivity extends Activity implements  View.OnClickListener,
         mShowActionButtons = (Switch) findViewById(R.id.show_action_buttons_switch);
         mFab = (ImageView) findViewById(R.id.floating_action_button);
 
-        mFabBackground = (GradientDrawable) findViewById(R.id.floating_action_button_container)
+        mFabContainerBackground = (GradientDrawable) findViewById(R.id.floating_action_button_container)
                 .getBackground().mutate();
 
         mTypeButtonsGroup.setOnCheckedChangeListener(this);
@@ -105,6 +117,54 @@ public class MainActivity extends Activity implements  View.OnClickListener,
         if (savedInstanceState == null) {
             onCheckedChanged(mTypeButtonsGroup, R.id.type_default);
             mShowActionButtons.setChecked(true);
+        }
+    }
+
+    private void updateTheme() {
+        mUseOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
+                && ThemeHelper.useLightStatusBar(this);
+        mUseOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
+                && ThemeHelper.useLightNavigationBar(this);
+        int themeResId = 0;
+
+        if (mUseOptionalLightStatusBar && mUseOptionalLightNavigationBar) {
+            themeResId = R.style.ThemeOverlay_LightStatusBar_LightNavigationBar;
+        } else if (mUseOptionalLightStatusBar) {
+            themeResId = R.style.ThemeOverlay_LightStatusBar;
+        } else if (mUseOptionalLightNavigationBar) {
+            themeResId = R.style.ThemeOverlay_LightNavigationBar;
+        } else {
+            themeResId = R.style.AppTheme;
+        }
+        setTheme(themeResId);
+
+        int oldFlags = getWindow().getDecorView().getSystemUiVisibility();
+        int newFlags = oldFlags;
+        if (!mUseOptionalLightStatusBar) {
+            // Possibly we are using the Whiteout theme
+            boolean isWhiteoutTheme =
+                    ThemeHelper.getTheme(this) == UiModeManager.MODE_NIGHT_NO_WHITEOUT;
+            boolean isLightStatusBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                    == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            // Check if light status bar flag was set,
+            // and we are not using the Whiteout theme,
+            // (Whiteout theme should always use a light status bar).
+            if (isLightStatusBar && !isWhiteoutTheme) {
+                // Remove flag
+                newFlags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            }
+        }
+        if (!mUseOptionalLightNavigationBar) {
+            // Check if light navigation bar flag was set
+            boolean isLightNavigationBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+                    == View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            if (isLightNavigationBar) {
+                // Remove flag
+                newFlags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            }
+        }
+        if (oldFlags != newFlags) {
+            getWindow().getDecorView().setSystemUiVisibility(newFlags);
         }
     }
 
@@ -146,6 +206,7 @@ public class MainActivity extends Activity implements  View.OnClickListener,
         mTypeButtonsGroup.check(0);
         mTypeButtonsGroup.check(view.getId());
         int fabIconResId = R.drawable.ic_send;
+        mIsMediaNotification = false;
         switch (view.getId()) {
             default:
             case R.id.type_default:
@@ -162,10 +223,12 @@ public class MainActivity extends Activity implements  View.OnClickListener,
                 break;
             case R.id.type_media:
                 fabIconResId = R.drawable.ic_status_bar_media;
+                mIsMediaNotification = true;
                 break;
         }
 
         mFab.setImageResource(fabIconResId);
+        updateFab();
     }
 
     @Override
@@ -178,7 +241,6 @@ public class MainActivity extends Activity implements  View.OnClickListener,
 
     private Notification buildNotification() {
         Notification.Builder builder = null;
-        boolean isMediaNotification = false;
         switch (mTypeButtonsGroup.getCheckedRadioButtonId()) {
             default:
             case R.id.type_default:
@@ -203,7 +265,6 @@ public class MainActivity extends Activity implements  View.OnClickListener,
                 break;
             case R.id.type_media:
                 builder = new Notification.Builder(this, MEDIA_NOTIFICATION_CHANNEL_ID);
-                isMediaNotification = true;
                 prepareMediaNotification(builder);
                 break;
         }
@@ -222,7 +283,7 @@ public class MainActivity extends Activity implements  View.OnClickListener,
             PendingIntent intent = PendingIntent.getActivity(this, 0, new Intent(), 0);
             builder.setFullScreenIntent(intent, false);
         }
-        if (!mUtils.getUseDefaultNotificationColor() && !isMediaNotification) {
+        if (!mUtils.getUseDefaultNotificationColor() || !mIsMediaNotification) {
             builder.setColor(mUtils.getNotificationColor());
         }
 
@@ -256,12 +317,12 @@ public class MainActivity extends Activity implements  View.OnClickListener,
         for (int i = 0; i < buttons; i++) {
             boolean showTombstoneActions = mUtils.getShowTombstoneActions()
                     && !mUtils.getShowEmphasizedActions() && i != 1;
-            if (showReplyAction && i == 0) {
-                builder.addAction(getReplyAction());
-            } else {
+//            if (showReplyAction && i == 0) {
+//                builder.addAction(getReplyAction());
+//            } else {
                 builder.addAction(mRandomizer.getRandomIconId(), getResources().getString(
                         R.string.notification_action_text, (i + 1)), showTombstoneActions ? null : intent);
-            }
+//            }
         }
     }
 
@@ -385,11 +446,19 @@ public class MainActivity extends Activity implements  View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        mFabBackground.setColor(ColorStateList.valueOf(mUtils.getNotificationColor()));
-        mFab.setImageTintList(ColorStateList.valueOf(mUtils.getFabIconColor()));
+
+        boolean useOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
+                && ThemeHelper.useLightStatusBar(this);
+        boolean useOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
+                && ThemeHelper.useLightNavigationBar(this);
+        if (mUseOptionalLightStatusBar != useOptionalLightStatusBar
+                || mUseOptionalLightNavigationBar != useOptionalLightNavigationBar) {
+            recreate();
+        } else {
+            updateFab();
+        }
     }
     
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(PreferenceUtils.TYPE_BUTTONS_CHECKED_ID,
@@ -469,5 +538,27 @@ public class MainActivity extends Activity implements  View.OnClickListener,
         channel.setDescription(description);
 
         return channel;
+    }
+
+    private void updateFab() {
+        mFabContainerBackground.setColor(ColorStateList.valueOf(
+                mUtils.getNotificationColor(mIsMediaNotification)));
+        mFab.setImageTintList(ColorStateList.valueOf(getFabIconColor()));
+        mFab.setBackgroundTintList(ColorStateList.valueOf(getFabBackgroundColor()));
+    }
+
+    private int getFabIconColor() {
+        return getResources().getColor(
+                ColorHelper.isColorGrayscale(mUtils.getNotificationColor(mIsMediaNotification))
+                        && !ColorHelper.isColorDark(mUtils.getNotificationColor(mIsMediaNotification))
+                        ? R.color.floating_action_button_icon_color_dark
+                        : R.color.floating_action_button_icon_color_light);
+    }
+
+    private int getFabBackgroundColor() {
+        return getResources().getColor(
+                ColorHelper.isColorDark(mUtils.getNotificationColor(mIsMediaNotification))
+                        ? R.color.floating_action_button_pressed_color_light
+                        : R.color.floating_action_button_pressed_color_dark);
     }
 }

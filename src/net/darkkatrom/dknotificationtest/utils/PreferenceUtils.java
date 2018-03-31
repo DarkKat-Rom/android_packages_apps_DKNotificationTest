@@ -117,19 +117,17 @@ public final class PreferenceUtils {
     }
 
     public int getNotificationColor() {
-        if (getUseDefaultNotificationColor()) {
-            return mContext.getResources().getColor(R.color.default_notification_color);
-        } else {
-            return mPreferences.getInt(NOTIFICATION_COLOR,
-                    mContext.getResources().getColor(R.color.theme_accent));
-        }
+        return getNotificationColor(false);
     }
 
-    public int getFabIconColor() {
-        return mContext.getResources().getColor(
-                isColorGrayscale(getNotificationColor()) && !isColorDark(getNotificationColor())
-                        ? R.color.floating_action_button_icon_color_dark
-                        : R.color.floating_action_button_icon_color_light);
+    public int getNotificationColor(boolean isMediaNotification) {
+        final int defaultNotificationColor =
+                mContext.getResources().getColor(R.color.default_notification_color);
+        if (getUseDefaultNotificationColor() || isMediaNotification) {
+            return defaultNotificationColor;
+        } else {
+            return mPreferences.getInt(NOTIFICATION_COLOR, defaultNotificationColor);
+        }
     }
 
     public int getNotificationId() {
@@ -138,26 +136,5 @@ public final class PreferenceUtils {
 
     public void setNotificationId(int id) {
         mPreferences.edit().putInt(NOTIFICATION_ID, id).commit();
-    }
-
-    public static boolean isColorGrayscale(int color) {
-        int r = Color.red(color);
-        int g = Color.green(color);
-        int b = Color.blue(color);
-
-        return Math.abs(r - g) < 20
-                && Math.abs(r - b) < 20
-                && Math.abs(g - b) < 20;
-    }
-
-    private static boolean isColorDark(int color) {
-        double a = 1- (0.299 * Color.red(color)
-                + 0.587 * Color.green(color)
-                + 0.114 * Color.blue(color)) / 255;
-        if (a < 0.5) {
-            return false;
-        } else {
-            return true;
-        }
     }
 }

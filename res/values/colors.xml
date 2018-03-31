@@ -15,24 +15,29 @@
 -->
 <resources>
 
-    <!-- Action bar background color -->
-    <color name="theme_primary">#ff3f51b5</color>  <!-- material indigo 500 -->
+    <!-- Material colors -->
+    <color name="material_grey_300">#ffe0e0e0</color>
 
-    <!-- Status bar background color -->
-    <color name="theme_primary_dark">#ff303f9f</color>  <!-- material indigo 700 -->
+    <!-- App theme colors -->
+    <color name="theme_primary">#ff2196f3</color>  <!-- material blue 500 -->
+    <color name="theme_primary_dark">#ff1976d2</color>  <!-- material blue 700 -->
+    <color name="theme_accent">#ff5a8596</color>  <!-- 12% holo blue light over material blue grey 500 -->
 
-    <!-- Accent color -->
-    <color name="theme_accent">#ff9c27b0</color>  <!-- material purple 500 -->
+    <!-- Background color of the system bars when on light mode -->
+    <color name="background_light_system_bars">@color/material_grey_300</color>
 
-    <!-- Flaoting action button pressed color -->
-    <color name="floating_action_button_pressed_color">#1f000000</color>  <!-- 12% black -->
+    <!-- Flaoting action button pressed color on light backgrounds-->
+    <color name="floating_action_button_pressed_color_light">#33ffffff</color>  <!-- 20% white -->
+
+    <!-- Flaoting action button pressed color on dark backgrounds -->
+    <color name="floating_action_button_pressed_color_dark">#1f000000</color>  <!-- 12% black -->
 
     <!-- Flaoting action button icon color on light greycale backgrounds -->
     <color name="floating_action_button_icon_color_dark">#8a000000</color>  <!-- 54% black -->
 
     <!-- Flaoting action button icon color on dark or non greycale backgrounds -->
-    <color name="floating_action_button_icon_color_light">#ffffffff</color>  <!-- opaque white -->
+    <color name="floating_action_button_icon_color_light">@android:color/white</color>
 
     <!-- Default notification color -->
-    <color name="default_notification_color">#757575</color> <!-- Gray 600 -->
+    <color name="default_notification_color">#ff757575</color> <!-- Material gray 600 -->
 </resources>

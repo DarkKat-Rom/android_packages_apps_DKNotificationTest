@@ -58,7 +58,7 @@
     <string name="show_reply_action_title">Antworten Aktion anzeigen</string>
     <string name="show_reply_action_summary">Aktivieren um eine Antworten Aktion anzuzeigen.</string>
     <string name="use_default_notification_color_title">Standard benutzen</string>
-    <string name="use_default_notification_color_summary">Aktivieren um die Standard Benachrichigungsfarbe zu benutzen, deaktivieren um die Farbe zu wählen.</string>
+    <string name="use_default_notification_color_summary">Aktivieren um die Standard Benachrichigungsfarbe zu benutzen, deaktivieren um die Farbe zu wählen.\n(Hinweis: Media Benachrichtigungen benutzen eine eigene Benachrichtigungsfarbe, deswegen wird weder die Standard noch die gewählte Benachrichtigungsfarbe bei Media Benachrichtigungen angewendet).</string>
     <string name="notification_color_title">Benachrichigungsfarbe</string>
     <string name="color_title">Farbe</string>
     <string name="pick_color_title">Farbe wählen</string>

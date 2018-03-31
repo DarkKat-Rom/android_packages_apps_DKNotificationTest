@@ -13,13 +13,12 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <resources>
 
-    <!-- Theme  DarkKat -->
-
-    <!-- Flaoting action button pressed color -->
-    <color name="floating_action_button_pressed_color">#33ffffff</color>  <!-- 20% white -->
-
-    <!-- Default notification color -->
-    <color name="default_notification_color">#ffffffff</color>  <!-- white -->
+    <!-- Theme.Material.Light (Whiteout version) -->
+    <style name="AppTheme" parent="@android:style/Theme.Material.DayNight">
+        <item name="android:colorPrimaryDark">@color/background_light_system_bars</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>

@@ -32,12 +32,14 @@ import net.darkkatrom.dkcolorpicker.preference.ColorPickerPreference;
 import net.darkkatrom.dknotificationtest.fragments.SettingsFragment;
 
 public class SettingsActivity extends Activity implements
-        PreferenceFragment.OnPreferenceStartFragmentCallback {
+        PreferenceFragment.OnPreferenceStartFragmentCallback, ColorPickerPreference.OwnerActivity {
 
     public static final String EXTRA_SHOW_FRAGMENT = ":android:show_fragment";
 
-    private boolean mUseOptionalLightStatusBar;
-    private boolean mUseOptionalLightNavigationBar;
+    private int mThemeResId = 0;
+    private boolean mIsWhiteoutTheme = false;
+    private boolean mUseOptionalLightStatusBar = false;
+    private boolean mUseOptionalLightNavigationBar = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +58,17 @@ public class SettingsActivity extends Activity implements
                 && ThemeHelper.useLightStatusBar(this);
         mUseOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
                 && ThemeHelper.useLightNavigationBar(this);
-        int themeResId = 0;
 
         if (mUseOptionalLightStatusBar && mUseOptionalLightNavigationBar) {
-            themeResId = R.style.ThemeOverlay_LightStatusBar_LightNavigationBar;
+            mThemeResId = R.style.ThemeOverlay_LightStatusBar_LightNavigationBar;
         } else if (mUseOptionalLightStatusBar) {
-            themeResId = R.style.ThemeOverlay_LightStatusBar;
+            mThemeResId = R.style.ThemeOverlay_LightStatusBar;
         } else if (mUseOptionalLightNavigationBar) {
-            themeResId = R.style.ThemeOverlay_LightNavigationBar;
+            mThemeResId = R.style.ThemeOverlay_LightNavigationBar;
         } else {
-            themeResId = R.style.AppTheme;
+            mThemeResId = R.style.AppTheme;
         }
-        setTheme(themeResId);
+        setTheme(mThemeResId);
 
         int oldFlags = getWindow().getDecorView().getSystemUiVisibility();
         int newFlags = oldFlags;
@@ -141,5 +142,25 @@ public class SettingsActivity extends Activity implements
                 || mUseOptionalLightNavigationBar != useOptionalLightNavigationBar) {
             recreate();
         }
+    }
+
+    @Override
+    public int getCurentThemeResId() {
+        return mThemeResId;
+    }
+
+    @Override
+    public boolean isWhiteoutTheme() {
+        return mIsWhiteoutTheme;
+    }
+
+    @Override
+    public boolean useOptionalLightStatusBar() {
+        return mUseOptionalLightStatusBar;
+    }
+
+    @Override
+    public boolean useOptionalLightNavigationBar() {
+        return mUseOptionalLightNavigationBar;
     }
 }

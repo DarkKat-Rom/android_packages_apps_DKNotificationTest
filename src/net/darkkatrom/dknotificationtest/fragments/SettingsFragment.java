@@ -18,7 +18,7 @@ package net.darkkatrom.dknotificationtest.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.SwitchPreference;
+import android.preference.PreferenceScreen;
 
 import net.darkkatrom.dkcolorpicker.fragment.SettingsColorPickerFragment;
 import net.darkkatrom.dknotificationtest.R;
@@ -27,33 +27,47 @@ import net.darkkatrom.dknotificationtest.utils.PreferenceUtils;
 public class SettingsFragment extends SettingsColorPickerFragment implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private SwitchPreference mShowEmphasizedActions;
-    private SwitchPreference mShowTombstoneActions;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        updatePreferenceScreen();
+    }
 
+    public void updatePreferenceScreen() {
+        PreferenceScreen prefs = getPreferenceScreen();
+        if (prefs != null) {
+            prefs.removeAll();
+        }
         addPreferencesFromResource(R.xml.settings);
 
-        PreferenceUtils.getInstance(getActivity()).setOnSharedPreferenceChangeListener(this);
-
-        mShowEmphasizedActions =
-                (SwitchPreference) findPreference(PreferenceUtils.SHOW_EMPHASIZED_ACTIONS);
-        mShowTombstoneActions =
-                (SwitchPreference) findPreference(PreferenceUtils.SHOW_TOMBSTONE_ACTIONS);
-
-        mShowTombstoneActions.setEnabled(!mShowEmphasizedActions.isChecked());
-        mShowEmphasizedActions.setEnabled(!mShowTombstoneActions.isChecked());
+        if (PreferenceUtils.getInstance(getActivity()).getShowEmphasizedActions()) {
+            removePreference(PreferenceUtils.SHOW_TOMBSTONE_ACTIONS);
+        }
+        if (PreferenceUtils.getInstance(getActivity()).getShowTombstoneActions()) {
+            removePreference(PreferenceUtils.SHOW_EMPHASIZED_ACTIONS);
+        }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
              String key) {
-        if (key.equals(PreferenceUtils.SHOW_EMPHASIZED_ACTIONS)) {
-            mShowTombstoneActions.setEnabled(!mShowEmphasizedActions.isChecked());
-        } else if (key.equals(PreferenceUtils.SHOW_TOMBSTONE_ACTIONS)) {
-            mShowEmphasizedActions.setEnabled(!mShowTombstoneActions.isChecked());
+        if (key.equals(PreferenceUtils.SHOW_EMPHASIZED_ACTIONS)
+                || key.equals(PreferenceUtils.SHOW_TOMBSTONE_ACTIONS)) {
+            updatePreferenceScreen();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }

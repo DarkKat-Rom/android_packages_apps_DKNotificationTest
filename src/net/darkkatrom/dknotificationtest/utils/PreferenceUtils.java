@@ -60,10 +60,6 @@ public final class PreferenceUtils {
         return sInstance;
     }
 
-    public void setOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener){
-        mPreferences.registerOnSharedPreferenceChangeListener(listener);
-    }
-
     public void setNotificationStyle(int style) {
         mPreferences.edit().putInt(NOTIFICATION_STYLE, style).commit();
     }

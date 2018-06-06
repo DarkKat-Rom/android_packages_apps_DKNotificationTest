@@ -29,6 +29,7 @@ import android.content.res.ColorStateList;
 import android.media.session.MediaSession;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,6 +44,7 @@ import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.ToggleButton;
 
+import com.android.internal.util.darkkat.ThemeColorHelper;
 import com.android.internal.util.darkkat.ColorHelper;
 import com.android.internal.util.darkkat.ThemeHelper;
 
@@ -82,8 +84,18 @@ public class MainActivity extends Activity implements  View.OnClickListener,
 
     private GradientDrawable mFabContainerBackground;
 
-    private boolean mUseOptionalLightStatusBar;
-    private boolean mUseOptionalLightNavigationBar;
+    private int mThemeResId = 0;
+    private boolean mCustomizeColors = false;
+    private int mDefaultPrimaryColor = 0;
+    private int mStatusBarColor = 0;
+    private int mPrimaryColor = 0;
+    private int mNavigationColor = 0;
+    private boolean mColorizeNavigationBar = false;
+    private boolean mLightStatusBar = false;
+    private boolean mLightActionBar = false;
+    private boolean mLightNavigationBar = false;
+    private boolean mIsBlackoutTheme = false;
+    private boolean mIsWhiteoutTheme = false;
 
     private boolean mIsMediaNotification = false;
 
@@ -121,40 +133,45 @@ public class MainActivity extends Activity implements  View.OnClickListener,
     }
 
     private void updateTheme() {
-        mUseOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
-                && ThemeHelper.useLightStatusBar(this);
-        mUseOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
-                && ThemeHelper.useLightNavigationBar(this);
-        int themeResId = 0;
+        mCustomizeColors = ThemeColorHelper.customizeColors(this);
+        mDefaultPrimaryColor = getColor(R.color.theme_primary);
+        mStatusBarColor = ThemeColorHelper.getStatusBarBackgroundColor(this, mDefaultPrimaryColor);
+        mPrimaryColor = ThemeColorHelper.getPrimaryColor(this, mDefaultPrimaryColor);
+        mNavigationColor = ThemeColorHelper.getNavigationBarBackgroundColor(this, mDefaultPrimaryColor);
+        mColorizeNavigationBar = ThemeColorHelper.colorizeNavigationBar(this);
+        mLightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
+        mLightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
+        mLightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
+        mIsBlackoutTheme = ThemeHelper.isWhiteoutTheme(this);
+        mIsWhiteoutTheme = ThemeHelper.isWhiteoutTheme(this);
 
-        if (mUseOptionalLightStatusBar && mUseOptionalLightNavigationBar) {
-            themeResId = R.style.ThemeOverlay_LightStatusBar_LightNavigationBar;
-        } else if (mUseOptionalLightStatusBar) {
-            themeResId = R.style.ThemeOverlay_LightStatusBar;
-        } else if (mUseOptionalLightNavigationBar) {
-            themeResId = R.style.ThemeOverlay_LightNavigationBar;
+        if (mLightActionBar && mLightNavigationBar) {
+            mThemeResId = mLightStatusBar
+                    ? R.style.AppTheme_LightStatusBar_LightNavigationBar
+                    : R.style.AppTheme_LightActionBar_LightNavigationBar;
+        } else if (mLightActionBar) {
+            mThemeResId = mLightStatusBar
+                    ? R.style.AppTheme_LightStatusBar
+                    : R.style.AppTheme_LightActionBar;
+        } else if (mLightNavigationBar) {
+            mThemeResId = R.style.AppTheme_LightNavigationBar;
         } else {
-            themeResId = R.style.AppTheme;
+            mThemeResId = R.style.AppTheme;
         }
-        setTheme(themeResId);
+        setTheme(mThemeResId);
 
         int oldFlags = getWindow().getDecorView().getSystemUiVisibility();
         int newFlags = oldFlags;
-        if (!mUseOptionalLightStatusBar) {
-            // Possibly we are using the Whiteout theme
-            boolean isWhiteoutTheme =
-                    ThemeHelper.getTheme(this) == UiModeManager.MODE_NIGHT_NO_WHITEOUT;
+        if (!mLightStatusBar) {
             boolean isLightStatusBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
                     == View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            // Check if light status bar flag was set,
-            // and we are not using the Whiteout theme,
-            // (Whiteout theme should always use a light status bar).
-            if (isLightStatusBar && !isWhiteoutTheme) {
+            // Check if light status bar flag was set.
+            if (isLightStatusBar) {
                 // Remove flag
                 newFlags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
         }
-        if (!mUseOptionalLightNavigationBar) {
+        if (!mLightNavigationBar) {
             // Check if light navigation bar flag was set
             boolean isLightNavigationBar = (newFlags & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
                     == View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -165,6 +182,14 @@ public class MainActivity extends Activity implements  View.OnClickListener,
         }
         if (oldFlags != newFlags) {
             getWindow().getDecorView().setSystemUiVisibility(newFlags);
+        }
+
+        if (mCustomizeColors && !mIsBlackoutTheme && !mIsWhiteoutTheme) {
+            getWindow().setStatusBarColor(mStatusBarColor);
+            getActionBar().setBackgroundDrawable(new ColorDrawable(mPrimaryColor));
+        }
+        if (mNavigationColor != 0) {
+            getWindow().setNavigationBarColor(mNavigationColor);
         }
     }
 
@@ -447,12 +472,19 @@ public class MainActivity extends Activity implements  View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        boolean useOptionalLightStatusBar = ThemeHelper.themeSupportsOptionalĹightSB(this)
-                && ThemeHelper.useLightStatusBar(this);
-        boolean useOptionalLightNavigationBar = ThemeHelper.themeSupportsOptionalĹightNB(this)
-                && ThemeHelper.useLightNavigationBar(this);
-        if (mUseOptionalLightStatusBar != useOptionalLightStatusBar
-                || mUseOptionalLightNavigationBar != useOptionalLightNavigationBar) {
+        boolean customizeColors = ThemeColorHelper.customizeColors(this);
+        int primaryColor = ThemeColorHelper.getPrimaryColor(this, mDefaultPrimaryColor);
+        boolean colorizeNavigationBar = ThemeColorHelper.colorizeNavigationBar(this);
+        boolean lightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
+        boolean lightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
+        boolean lightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
+
+        if (mCustomizeColors != customizeColors
+                || mPrimaryColor != primaryColor
+                || mColorizeNavigationBar != colorizeNavigationBar
+                || mLightStatusBar != lightStatusBar
+                || mLightActionBar != lightActionBar
+                || mLightNavigationBar != lightNavigationBar) {
             recreate();
         } else {
             updateFab();

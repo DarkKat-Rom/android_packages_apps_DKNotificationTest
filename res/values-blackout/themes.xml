@@ -17,5 +17,12 @@
 <resources>
 
     <!-- Theme.Material (Blackout version) -->
+
+    <!-- Never use light action bar and system bars -->
     <style name="AppTheme" parent="@android:style/Theme.Material.DayNight" />
+    <style name="AppTheme.LightActionBar" />
+    <style name="AppTheme.LightStatusBar" />
+    <style name="AppTheme.LightNavigationBar" />
+    <style name="AppTheme.LightActionBar.LightNavigationBar" />
+    <style name="AppTheme.LightStatusBar.LightNavigationBar" />
 </resources>

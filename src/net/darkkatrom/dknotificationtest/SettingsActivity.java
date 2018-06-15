@@ -71,7 +71,7 @@ public class SettingsActivity extends Activity implements
         mLightStatusBar = ThemeColorHelper.lightStatusBar(this, 0xff2196f3);
         mLightActionBar = ThemeColorHelper.lightActionBar(this, 0xff2196f3);
         mLightNavigationBar = ThemeColorHelper.lightNavigationBar(this, 0xff2196f3);
-        mIsBlackoutTheme = ThemeHelper.isWhiteoutTheme(this);
+        mIsBlackoutTheme = ThemeHelper.isBlackoutTheme(this);
         mIsWhiteoutTheme = ThemeHelper.isWhiteoutTheme(this);
 
         if (mLightActionBar && mLightNavigationBar) {

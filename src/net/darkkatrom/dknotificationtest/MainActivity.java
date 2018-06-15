@@ -142,7 +142,7 @@ public class MainActivity extends Activity implements  View.OnClickListener,
         mLightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
         mLightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
         mLightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
-        mIsBlackoutTheme = ThemeHelper.isWhiteoutTheme(this);
+        mIsBlackoutTheme = ThemeHelper.isBlackoutTheme(this);
         mIsWhiteoutTheme = ThemeHelper.isWhiteoutTheme(this);
 
         if (mLightActionBar && mLightNavigationBar) {

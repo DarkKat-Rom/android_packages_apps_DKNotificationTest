@@ -96,6 +96,7 @@ public class MainActivity extends Activity implements  View.OnClickListener,
     private boolean mLightNavigationBar = false;
     private boolean mIsBlackoutTheme = false;
     private boolean mIsWhiteoutTheme = false;
+    private int mThemeOverlayAccentResId = 0;
 
     private boolean mIsMediaNotification = false;
 
@@ -159,6 +160,11 @@ public class MainActivity extends Activity implements  View.OnClickListener,
             mThemeResId = R.style.AppTheme;
         }
         setTheme(mThemeResId);
+
+        mThemeOverlayAccentResId = ThemeColorHelper.getThemeOverlayAccentResId(this);
+        if (mThemeOverlayAccentResId > 0) {
+            getTheme().applyStyle(mThemeOverlayAccentResId, true);
+        }
 
         int oldFlags = getWindow().getDecorView().getSystemUiVisibility();
         int newFlags = oldFlags;
@@ -478,8 +484,10 @@ public class MainActivity extends Activity implements  View.OnClickListener,
         boolean lightStatusBar = ThemeColorHelper.lightStatusBar(this, mDefaultPrimaryColor);
         boolean lightActionBar = ThemeColorHelper.lightActionBar(this, mDefaultPrimaryColor);
         boolean lightNavigationBar = ThemeColorHelper.lightNavigationBar(this, mDefaultPrimaryColor);
+        int themeOverlayAccentResId = ThemeColorHelper.getThemeOverlayAccentResId(this);
 
-        if (mCustomizeColors != customizeColors
+        if (mThemeOverlayAccentResId != themeOverlayAccentResId
+                || mCustomizeColors != customizeColors
                 || mPrimaryColor != primaryColor
                 || mColorizeNavigationBar != colorizeNavigationBar
                 || mLightStatusBar != lightStatusBar

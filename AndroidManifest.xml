@@ -24,7 +24,7 @@
             android:label="@string/settings_title"/>
 
         <activity
-            android:name="net.darkkatrom.dkcolorpicker.activity.ColorPickerDKThemedActivity"
+            android:name="net.darkkatrom.dkcolorpicker.activity.ColorPickerThemedActivity"
             android:label="@string/pick_color_title" />
 
 <!--
